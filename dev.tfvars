@@ -9,8 +9,8 @@
 # =============================================================================
 
 # --- REQUIRED: Change these to YOUR values ---
-project_id = "your-gcp-project-id"      # ← Replace with your GCP project ID
-region     = "asia-south1"               # ← Mumbai (closest to Bhopal)
+project_id = "kkgcplabs01-036"      # ← Replace with your GCP project ID
+region     = "us-central1"               # ← Mumbai (closest to Bhopal)
 
 # --- Environment ---
 environment = "dev"

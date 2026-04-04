@@ -301,7 +301,7 @@ resource "google_compute_router_nat" "nat" {
   # "ERRORS_ONLY" = Only log when NAT fails (e.g., port exhaustion).
   # "ALL"         = Log everything (verbose, useful for debugging).
   log_config {
-    enable = true
+    enable = false
     filter = "ERRORS_ONLY"
   }
 
