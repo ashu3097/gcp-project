@@ -1,0 +1,174 @@
+# =============================================================================
+# .gitignore for Terraform GCP VPC Module
+# =============================================================================
+# This file tells Git which files/folders to IGNORE (never commit).
+# Terraform generates several files that should NOT be in version control
+# because they contain secrets, are machine-specific, or are auto-generated.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# 1. TERRAFORM STATE FILES — NEVER COMMIT THESE
+# -----------------------------------------------------------------------------
+# terraform.tfstate contains the ENTIRE state of your infrastructure —
+# resource IDs, IP addresses, and sometimes SECRETS (like database passwords).
+#
+# If you commit this:
+#   - Secrets are exposed in your Git history FOREVER
+#   - Team members will have conflicting state files
+#
+# Instead, use a remote backend (GCS bucket) for shared state.
+# -----------------------------------------------------------------------------
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+
+# -----------------------------------------------------------------------------
+# 2. TERRAFORM LOCK FILE — COMMIT THIS (exception!)
+# -----------------------------------------------------------------------------
+# .terraform.lock.hcl pins the exact provider versions your team uses.
+# It ensures everyone gets the same provider version.
+#
+# DO NOT add this to .gitignore — it SHOULD be committed.
+# (We're just noting it here so you know not to delete it.)
+#
+# !.terraform.lock.hcl   ← This would UN-ignore it (already not ignored)
+# -----------------------------------------------------------------------------
+
+
+# -----------------------------------------------------------------------------
+# 3. TERRAFORM WORKING DIRECTORY
+# -----------------------------------------------------------------------------
+# .terraform/ is created by `terraform init`. It contains:
+#   - Downloaded provider plugins (hundreds of MBs)
+#   - Module cache
+#   - Backend configuration
+#
+# This is auto-generated and machine-specific. Never commit it.
+# Each developer runs `terraform init` to recreate it.
+# -----------------------------------------------------------------------------
+.terraform/
+
+
+# -----------------------------------------------------------------------------
+# 4. CRASH LOGS
+# -----------------------------------------------------------------------------
+# If Terraform crashes, it writes a crash.log file.
+# Useful for debugging locally, not needed in the repo.
+# -----------------------------------------------------------------------------
+crash.log
+crash.*.log
+
+
+# -----------------------------------------------------------------------------
+# 5. PLAN OUTPUT FILES
+# -----------------------------------------------------------------------------
+# When you run `terraform plan -out=plan.tfplan`, the output file
+# contains the full plan including potentially sensitive data.
+# Never commit plan files.
+# -----------------------------------------------------------------------------
+*.tfplan
+*.tfplan.*
+
+
+# -----------------------------------------------------------------------------
+# 6. VARIABLE FILES WITH SECRETS
+# -----------------------------------------------------------------------------
+# .tfvars files CAN contain secrets (API keys, passwords, etc.).
+#
+# We're using a SELECTIVE approach here:
+#   - *.auto.tfvars  → Ignored (these auto-load and often have secrets)
+#   - *.tfvars       → NOT ignored (our env files don't have secrets)
+#
+# If your .tfvars files contain secrets (like DB passwords), uncomment:
+# *.tfvars
+#
+# Our environment .tfvars files (dev.tfvars, staging.tfvars, prod.tfvars)
+# only contain non-sensitive config (CIDRs, region, flags), so they're
+# safe to commit. The project_id placeholder should be replaced locally
+# or via CI/CD variables.
+# -----------------------------------------------------------------------------
+*.auto.tfvars
+*.auto.tfvars.json
+
+# If you create a secrets file, add it here:
+# secrets.tfvars
+# *-secrets.tfvars
+
+
+# -----------------------------------------------------------------------------
+# 7. OVERRIDE FILES
+# -----------------------------------------------------------------------------
+# Terraform loads override files automatically.
+# These are for local-only customizations that shouldn't be shared.
+# Example: override.tf might point to a local backend for testing.
+# -----------------------------------------------------------------------------
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+
+# -----------------------------------------------------------------------------
+# 8. TERRAFORM CLI CONFIGURATION
+# -----------------------------------------------------------------------------
+# .terraformrc and terraform.rc are CLI config files that may contain
+# credentials for Terraform Cloud or custom provider registries.
+# These are user-specific and should never be committed.
+# -----------------------------------------------------------------------------
+.terraformrc
+terraform.rc
+
+
+# -----------------------------------------------------------------------------
+# 9. IDE AND EDITOR FILES
+# -----------------------------------------------------------------------------
+# These are created by your code editor. They're user-specific settings
+# and should not be in the repo.
+# -----------------------------------------------------------------------------
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (IntelliJ, GoLand, WebStorm, etc.)
+.idea/
+*.iml
+
+# Vim
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.DS_Store?
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Linux
+*~
+
+
+# -----------------------------------------------------------------------------
+# 10. MISCELLANEOUS
+# -----------------------------------------------------------------------------
+
+# Dependency directories
+node_modules/
+vendor/
+
+# Log files
+*.log
+
+# Environment files (may contain secrets)
+.env
+.env.*
+!.env.example
+
+# Temporary files
+tmp/
+temp/
